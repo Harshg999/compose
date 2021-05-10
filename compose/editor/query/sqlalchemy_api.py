@@ -250,7 +250,6 @@ class SqlAlchemyInterface:
             )
 
         result = connection.execute(statement)
-        print(result)
 
         # cache == sa_query_handle
         cache = {
@@ -259,7 +258,7 @@ class SqlAlchemyInterface:
             "meta": [
                 {
                     "name": col[0]
-                    if (type(col) is tuple or type(col) is dict)
+                    if type(col) is tuple or type(col) is dict
                     else col.name
                     if hasattr(col, "name")
                     else col,
@@ -278,7 +277,7 @@ class SqlAlchemyInterface:
             "sync": not is_async,
             "has_result_set": cache["has_result_set"],
             "modified_row_count": 0,
-            "guid": guid,
+            "guid": guid,  # Rename to id
             "result": {
                 "has_more": result.cursor != None,
                 "data": []
@@ -311,16 +310,16 @@ class SqlAlchemyInterface:
         handle = CONNECTIONS.get(query_id)
 
         if handle:
-            data = handle["result"].fetchmany(rows)
+            data = [[col for col in row] for row in handle["result"].fetchmany(rows)]
             meta = handle["meta"]
             self._assign_types(data, meta)
         else:
             raise QueryExpired()
 
         return {
-            "has_more": data and len(data) >= rows or False,
-            "data": data if data else [],
-            "meta": meta if meta else [],
+            "has_more": len(data) >= rows,
+            "data": data,
+            "meta": meta,
             "type": "table",
         }
 

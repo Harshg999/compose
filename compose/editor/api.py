@@ -36,13 +36,32 @@ import json
 import logging
 
 from django.http import HttpResponseBadRequest, JsonResponse
+from django.utils.functional import wraps
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework.decorators import api_view
 
 from .query.engines import Executor
+from .query.exceptions import QueryExpired
 
 LOG = logging.getLogger(__name__)
+
+
+def api_error_handler(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        response = {}
+
+        try:
+            return f(*args, **kwargs)
+        except QueryExpired:
+            response["query_status"] = {"status": "expired"}
+            response["status"] = 0
+        finally:
+            if response:
+                return JsonResponse(response)
+
+    return wrapper
 
 
 @extend_schema(
@@ -64,7 +83,6 @@ def query(request, dialect=None):
 
 @api_view(["POST"])
 def create_session(request):
-
     return JsonResponse(
         {"status": 0, "session": {"type": "1", "id": None, "properties": []}}
     )
@@ -86,34 +104,61 @@ def execute(request, dialect=None):
     if not statement:
         return HttpResponseBadRequest()
 
-    data = Executor(username=request.user, interpreter=interpreter).execute(
+    handle = Executor(username=request.user, interpreter=interpreter).execute(
         statement=statement
     )
 
-    return JsonResponse(data["handle"])  # {"uuid": "abc", "handle": {}}
+    return JsonResponse(
+        {
+            "status": 0,
+            "handle": handle,
+            "history_id": 1396,  # To push down to Engine but needed in current js
+            "history_uuid": handle["guid"],  # Same
+        }
+    )
 
 
 @api_view(["POST"])
 def check_status(request):
     query_id = request.data.get("query_id")
-    # operation_id = request.POST.get('operationId')
-    interpreter = _get_interpreter(request.data)
+    if not query_id:
+        query_id = request.data.get("operationId")
+
+    interpreter = _get_interpreter(query_id)
 
     data = Executor(username=request.user, interpreter=interpreter).check_status(
         query_id=query_id
     )
 
-    return JsonResponse(data)
+    # Note: {"status": "available", "has_result_set": true}
+    return JsonResponse({"status": 0, "query_status": data})
 
 
 @api_view(["POST"])
 def fetch_result_data(request):
-    pass
+    query_id = request.data.get("operationId")
+    rows = json.loads(request.data.get("rows", "100"))
+    start_over = json.loads(request.data.get("startOver", "false"))
+
+    interpreter = _get_interpreter(query_id)
+
+    response = Executor(username=request.user, interpreter=interpreter).fetch_result(
+        query_id=query_id, rows=rows, start_over=start_over
+    )
+
+    return JsonResponse(
+        {
+            "result": response,
+            "status": 0,
+        }
+    )
 
 
 @api_view(["POST"])
 def get_logs(request):
-    pass
+    return JsonResponse(
+        {"status": 0, "logs": "", "progress": 50, "jobs": [], "isFullLogs": True}
+    )
 
 
 @api_view(["POST"])
@@ -130,10 +175,10 @@ def autocomplete(request, database=None, table=None, column=None, nested=None):
     return JsonResponse(data)
 
 
-def _get_interpreter(data):
-    # snippet: {"type":"1","source":"data"}
-    snippet = data.get("snippet")
-    connector_id = json.loads(snippet)["type"]  # Could be id or full
+def _get_interpreter(query_id):
+    # TODO
+    # From query_id get connector_id and so get interpreter
+    # connector_id = ...
 
     interpreter = {
         "options": {

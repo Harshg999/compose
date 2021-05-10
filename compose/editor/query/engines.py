@@ -62,8 +62,6 @@ class Executor:
         # hue uuid/id(if historify) + native handle
         # async if TS, check poll/stream too
 
-        response = {"status": -1}
-
         # interpreter.execute needs the sessions, but we don't want to persist them
         # pre_execute_sessions = notebook['sessions']
         # notebook['sessions'] = sessions
@@ -73,12 +71,14 @@ class Executor:
             "database": None,
             "dialect": self.interpreter["dialect"],
         }
-        response["handle"] = self.connector.execute(query)
+        handle = self.connector.execute(query)
         # notebook['sessions'] = pre_execute_sessions
 
-        response["status"] = 0
+        # TODO: here could integrate with Hue Documents when query history is set
+        # handle["history_id"] = 1396
+        # handle["history_uuid"] = "d1799c55-8518-4e68-9545-26043954269f"
 
-        return response
+        return handle
 
     def check_status(self, query_id):
         data = self.connector.check_status(query_id)
@@ -86,9 +86,7 @@ class Executor:
         return {"status": data["status"]}
 
     def fetch_result(self, query_id, rows=100, start_over=False):
-        data = self.connector.fetch_result(query_id, rows=rows, start_over=start_over)
-
-        return {"result": data}
+        return self.connector.fetch_result(query_id, rows=rows, start_over=start_over)
 
     def autocomplete(self, database=None, table=None, column=None, nested=None):
         data = self.connector.autocomplete(
