@@ -27,6 +27,8 @@ urlpatterns = [
     re_path(r"^check_status/?$", api.check_status, name="check_status"),
     re_path(r"^fetch_result_data/?$", api.fetch_result_data, name="fetch_result_data"),
     re_path(r"^get_logs/?$", api.get_logs, name="get_logs"),
+    re_path(r"^cancel_statement/?$", api.cancel, name="cancel_statement"),
+    re_path(r"^close_statement/?$", api.close, name="close_statement"),
     re_path(r"^autocomplete/?$", api.autocomplete, name="autocomplete_databases"),
     re_path(
         r"^autocomplete/(?P<database>[^/?]*)/?$",

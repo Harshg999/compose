@@ -162,6 +162,16 @@ def get_logs(request):
 
 
 @api_view(["POST"])
+def cancel(request):
+    return JsonResponse({})
+
+
+@api_view(["POST"])
+def close(request):
+    return JsonResponse({})
+
+
+@api_view(["POST"])
 def autocomplete(request, database=None, table=None, column=None, nested=None):
     print(request.data)
     print(request.POST)
