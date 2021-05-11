@@ -20,9 +20,10 @@ RUN python -m pip install --upgrade pip
 # sudo apt-get install -y nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
   && apt-get install -y nodejs
-RUN cd /build/compose-ui/ && npm install && npm run build && mv build /app/static/
-COPY compose-ui/auth.html /app/static/auth.html
-RUN sed -i "s/http:\/\/localhost:8005/https:\/\/api.gethue.com/g" /app/static/index.html
+RUN cd /build/sql-scratchpad && \
+    npm install && \
+    sed -i "s/http:\/\/localhost:8005/https:\/\/api.gethue.com/g" index.html && \
+    mv /build/sql-scratchpad /app/static/
 
 # API
 RUN python -m pip install /build && rm -rf /build
