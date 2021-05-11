@@ -20,8 +20,8 @@ RUN python -m pip install --upgrade pip
 # sudo apt-get install -y nodejs
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash - \
   && apt-get install -y nodejs
-RUN cd /build/compose-ui/sql-scratchpad && npm install && npm run build && mv build /app/static/
-COPY compose-ui/index.html /app/static/auth.html
+RUN cd /build/compose-ui/ && npm install && npm run build && mv build /app/static/
+COPY compose-ui/auth.html /app/static/auth.html
 
 # API
 RUN python -m pip install /build && rm -rf /build
