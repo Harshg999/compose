@@ -61,11 +61,11 @@ urlpatterns += [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
-    path(
-        "",
-        SpectacularSwaggerView.as_view(url_name="schema"),
-        name="index",
-    ),
+    # path(
+    #     "",
+    #     SpectacularSwaggerView.as_view(url_name="schema"),
+    #     name="index",
+    # ),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
