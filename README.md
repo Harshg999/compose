@@ -69,8 +69,8 @@ Live
 
 Query
 
-  curl -u hue:hue -X POST http://localhost:8005/editor/v1/query/sqlite --data 'statement=SELECT 100, 200'
+    curl -u hue:hue -X POST http://localhost:8005/editor/v1/query/sqlite --data 'statement=SELECT 100, 200'
 
-  curl -u hue:hue -X POST http://localhost:8005/editor/v1/execute/sqlite --data 'statement=SELECT 100, 200'
-  curl -u hue:hue -X POST http://localhost:8005/editor/v1/check_status --data 'qid=abc'
-  curl -u hue:hue -X POST http://localhost:8005/editor/v1/fetch_result_data --data 'qid=abc'
+    curl -u hue:hue -X POST http://localhost:8005/editor/v1/execute/sqlite --data 'statement=SELECT 100, 200'
+    curl -u hue:hue -X POST http://localhost:8005/editor/v1/check_status --data 'qid=abc'
+    curl -u hue:hue -X POST http://localhost:8005/editor/v1/fetch_result_data --data 'qid=abc'

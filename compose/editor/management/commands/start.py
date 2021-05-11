@@ -24,4 +24,6 @@ class Command(BaseCommand):
     help = "Start the Compose production server"
 
     def handle(self, *args, **options):
-        os.system("gunicorn compose.conf.wsgi --bind 0.0.0.0:8005")
+        os.system(
+            "gunicorn compose.conf.wsgi --bind 0.0.0.0:8005 --access-logfile '-' --error-logfile '-'"
+        )

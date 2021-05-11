@@ -2,17 +2,19 @@
 <html>
 <head>
         <title>SQL Scratchpad</title>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.12.1/polyfill.min.js"></script>
         <script type="text/javascript" src="./node_modules/gethue/lib/components/SqlScratchpadWebComponent.js"></script>
 </head>
 <body>
-        <div id="scratchpadContainer">Loading...</div>
+        <div style="position: absolute; height: 100%; width: 100%">
+                <sql-scratchpad api-url="http://localhost:9000"
+                dialect="mysql"
+                />
+                        <!--
+                        dialect="mysql"
+                        user="hue"
+                        password="hue"
+                        auth="jwt"
+                        -->
+              </div>
 </body>
-
-<script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-          window.SqlScratchpadWebComponent.setBaseUrl('http://localhost:9000');
-          document.getElementById('scratchpadContainer').innerHTML = '<sql-scratchpad />';
-        });
-</script>
 </html>
