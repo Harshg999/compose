@@ -76,7 +76,11 @@ def query(request, dialect=None):
     if not statement:
         return HttpResponseBadRequest()
 
-    data = Executor(username=request.user).query(statement=statement)
+    interpreter = _get_interpreter(request.data)
+
+    data = Executor(username=request.user, interpreter=interpreter).query(
+        statement=statement
+    )
 
     return JsonResponse(data)
 
@@ -192,9 +196,8 @@ def _get_interpreter(query_id):
 
     interpreter = {
         "options": {
-            "url":
-            # "sqlite:///db-demo.sqlite3"
-            "mysql://hue:hue@localhost:3306/hue"
+            "url": "sqlite:///db-demo.sqlite3"
+            # "mysql://hue:hue@localhost:3306/hue"
         },
         "name": "mysql",
         "dialect_properties": {},

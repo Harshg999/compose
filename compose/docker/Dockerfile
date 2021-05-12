@@ -33,6 +33,7 @@ COPY compose/docker/local_settings.py /usr/local/lib/python3.8/site-packages/com
 # COPY compose/docker/local_settings.py compose/conf/local_settings.py
 
 COPY compose/docker/startup.sh .
+COPY compose/docker/db-demo.sqlite3 .
 
 # Should chown and use a compose user
 
