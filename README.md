@@ -15,7 +15,7 @@ Compose
 Compose is the open source module powering the [Hue SQL Assistant](http://gethue.com). It comes as Web service for querying any [Databases & Data Warehouses](https://docs.gethue.com/administrator/configuration/connectors/) or building your own [Cloud SQL Editor](https://docs.gethue.com/developer/components/). Contributions are welcome and more modules are on the way (Files, Catalog...).
 
 
-<img src="https://cdn.gethue.com/uploads/2020/02/quick-query-component.jpg" width="450">
+<img src="https://cdn.gethue.com/uploads/2021/05/sql-scratchpad-v0.5.png" width="450">
 
 
 # Start
