@@ -53,7 +53,6 @@ ALLOWED_HOSTS = [
 
 ATOMIC_REQUESTS = True
 
-# Application definition
 
 INSTALLED_APPS = [
     "compose.editor.apps.EditorConfig",
@@ -64,11 +63,11 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "whitenoise.runserver_nostatic",  # Before staticfiles
     "django.contrib.staticfiles",
     "drf_spectacular",
     "rest_framework",
     "rest_framework.authtoken",
-    "whitenoise.runserver_nostatic",
 ]
 
 MIDDLEWARE = [
