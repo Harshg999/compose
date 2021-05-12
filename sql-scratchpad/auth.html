@@ -17,7 +17,7 @@ Check the console
 
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + data['data']['token'];
   }).then(function() {
-    axios.post('editor/v1/query/sqlite', {snippet: "{\"statement\":\"SELECT 1000, 1001\""}).then(function(data) {
+    axios.post('editor/v1/query/sqlite', {statement:"SELECT 1000, 1001"}).then(function(data) {
       console.log(data['data']);
     });
 
