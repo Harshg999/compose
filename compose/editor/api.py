@@ -42,7 +42,7 @@ from drf_spectacular.utils import OpenApiExample, extend_schema
 from rest_framework.decorators import api_view
 
 from .query.engines import Executor
-from .query.exceptions import QueryExpired
+from .query.exceptions import QueryError, QueryExpired
 
 LOG = logging.getLogger(__name__)
 
@@ -57,6 +57,10 @@ def api_error_handler(f):
         except QueryExpired:
             response["query_status"] = {"status": "expired"}
             response["status"] = 0
+        except QueryError as e:
+            LOG.exception("Error running %s" % f.__name__)
+            response["status"] = 1
+            response["message"] = e.message
         finally:
             if response:
                 return JsonResponse(response)
@@ -98,6 +102,7 @@ def create_session(request):
     responses=OpenApiTypes.STR,
 )
 @api_view(["POST"])
+@api_error_handler
 def execute(request, dialect=None):
     statement = (
         request.data.get("statement")
@@ -123,6 +128,7 @@ def execute(request, dialect=None):
 
 
 @api_view(["POST"])
+@api_error_handler
 def check_status(request):
     query_id = request.data.get("query_id")
     if not query_id:
@@ -139,6 +145,7 @@ def check_status(request):
 
 
 @api_view(["POST"])
+@api_error_handler
 def fetch_result_data(request):
     query_id = request.data.get("operationId")
     rows = json.loads(request.data.get("rows", "100"))
@@ -159,6 +166,7 @@ def fetch_result_data(request):
 
 
 @api_view(["POST"])
+@api_error_handler
 def get_logs(request):
     return JsonResponse(
         {"status": 0, "logs": "", "progress": 50, "jobs": [], "isFullLogs": True}
@@ -166,16 +174,19 @@ def get_logs(request):
 
 
 @api_view(["POST"])
+@api_error_handler
 def cancel(request):
     return JsonResponse({})
 
 
 @api_view(["POST"])
+@api_error_handler
 def close(request):
     return JsonResponse({})
 
 
 @api_view(["POST"])
+@api_error_handler
 def autocomplete(request, database=None, table=None, column=None, nested=None):
     print(request.data)
     print(request.POST)
@@ -196,8 +207,8 @@ def _get_interpreter(query_id):
 
     interpreter = {
         "options": {
-            "url": "sqlite:///db-demo.sqlite3"  # Dev server only (single threading)
-            # "url": "mysql://hue:hue@localhost:3306/hue"
+            # "url": "sqlite:///db-demo.sqlite3"  # Dev server only (single threading)
+            "url": "mysql://hue:hue@localhost:3306/hue"
         },
         "name": "mysql",
         "dialect_properties": {},

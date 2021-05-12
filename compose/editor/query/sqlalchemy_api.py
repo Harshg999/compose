@@ -45,6 +45,7 @@ from sqlalchemy.exc import (
     CompileError,
     NoSuchTableError,
     OperationalError,
+    ProgrammingError,
     UnsupportedCompilationError,
 )
 
@@ -66,26 +67,8 @@ def query_error_handler(func):
     def decorator(*args, **kwargs):
         try:
             return func(*args, **kwargs)
-        except OperationalError as e:
-            message = str(e)
-            if "1045" in message:  # 'Access denied' # MySQL
-                raise AuthenticationRequired(message=message)
-            else:
-                raise e
-        except AuthenticationRequired:
-            raise
-        except QueryExpired:
-            raise
-        except Exception as e:
-            message = str(e)
-            if (
-                "Invalid query handle" in message
-                or "Invalid OperationHandle" in message
-            ):
-                raise QueryExpired(e)
-            else:
-                LOG.exception("Query Error")
-                raise QueryError(message)
+        except (OperationalError, ProgrammingError) as e:
+            raise QueryError(ex=e)
 
     return decorator
 
@@ -221,7 +204,7 @@ class SqlAlchemyInterface:
     def query(self, query):
         return self.execute(query, is_async=False)
 
-    # @query_error_handler
+    @query_error_handler
     def execute(self, query, is_async=True):
         guid = uuid.uuid4().hex
 

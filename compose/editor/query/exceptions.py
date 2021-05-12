@@ -16,13 +16,17 @@
 # limitations under the License.
 
 from django.utils.encoding import smart_text
+from django.utils.translation import gettext as _
 
 
 class QueryError(Exception):
-    def __init__(self, message, handle=None):
-        super(QueryError, self).__init__(message)
-        self.message = message or _("No error message, please check the logs.")
-        self.handle = handle
+    def __init__(self, message=None, ex=None):
+        self.message = (
+            message or str(ex)
+            if ex is not None
+            else _("No error message, please check the logs.")
+        )
+        self.ex = ex
         self.extra = {}
 
     def __unicode__(self):
