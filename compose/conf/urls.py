@@ -18,6 +18,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
+from django.views.generic.base import RedirectView
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -26,6 +27,14 @@ from drf_spectacular.views import (
 from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
 
 urlpatterns = [
+    path(
+        "",
+        RedirectView.as_view(url="/static/", permanent=True),
+        name="index",
+    ),
+]
+
+urlpatterns += [
     path("iam/v1/get/auth-token/", obtain_jwt_token),
     path("iam/v1/verify/auth-token/", verify_jwt_token),
     path("iam/v1/auth/", include("rest_framework.urls", namespace="rest_framework")),
@@ -61,11 +70,6 @@ urlpatterns += [
         SpectacularRedocView.as_view(url_name="schema"),
         name="redoc",
     ),
-    # path(
-    #     "",
-    #     SpectacularSwaggerView.as_view(url_name="schema"),
-    #     name="index",
-    # ),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
