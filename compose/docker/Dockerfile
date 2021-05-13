@@ -26,7 +26,7 @@ RUN cd /build/sql-scratchpad && \
     mv /build/sql-scratchpad /app/static/
 
 # API
-RUN python -m pip install /build && rm -rf /build
+RUN python -m pip install /build && rm -rf /build && python -m pip install mysqlclient==2.0.3
 
 # Should have a more elegant conf dir
 COPY compose/docker/local_settings.py /usr/local/lib/python3.8/site-packages/compose/conf/local_settings.py
