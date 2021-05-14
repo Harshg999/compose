@@ -25,7 +25,7 @@ from django.urls import reverse
 
 
 @pytest.mark.django_db
-class TestExecutor:
+class TestFlow:
     def setup_method(self, method):
         self.c = Client()
 
@@ -33,17 +33,23 @@ class TestExecutor:
         assert self.c.login(username="test", password="test")
 
     def test_query(self):
-        resp = self.c.post(reverse("editor:query", kwargs={"dialect": "mysql"}))
+        resp = self.c.post(
+            reverse("editor:query", kwargs={"dialect": "mysql"}),
+            {"statement": "SELECT 1"},
+        )
         data = json.loads(resp.content)
 
-        assert data.get("handle")
-        assert data["handle"].get("guid")
+        assert data
+        assert data["result"]["data"], [[1]]
 
     def test_execute(self):
-        resp = self.c.post(reverse("editor:execute", kwargs={"dialect": "mysql"}))
+        resp = self.c.post(
+            reverse("editor:execute", kwargs={"dialect": "mysql"}),
+            {"statement": "SELECT 1"},
+        )
         data = json.loads(resp.content)
 
-        assert data["uuid"] == "abc"
+        assert data["status"] == 0
 
     def test_check_status(self):
         with patch("compose.editor.api.Executor.check_status") as check_status:
@@ -54,4 +60,5 @@ class TestExecutor:
             )
             data = json.loads(resp.content)
 
-            assert data["status"] == "running"
+            assert data["status"] == 0
+            assert data["query_status"]["status"] == "running"

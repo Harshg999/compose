@@ -32,7 +32,7 @@ def test_query():
     connector = SqlAlchemyInterface(username="test", interpreter=interpreter)
     query = {"statement": "SELECT 1, 2, 3"}
 
-    data = connector.execute(query=query)
+    data = connector.query(query=query)
 
     assert data["result"]["data"] == [[1, 2, 3]]
 

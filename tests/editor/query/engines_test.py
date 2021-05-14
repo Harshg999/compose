@@ -34,7 +34,8 @@ def test_execute():
             statement="SELECT 1, 2, 3"
         )
 
-        assert data["handle"].get("guid") == "abc"
+        assert data["guid"] == "abc"
+        # assert data["handle"].get("guid") == "abc"
 
 
 @pytest.mark.django_db
@@ -68,7 +69,8 @@ def test_execute_query_flow():
             statement="SELECT 1, 2, 3"
         )
 
-        assert data["handle"].get("guid") == "abc"
+        assert data["guid"] == "abc"
+        # assert data["handle"].get("guid") == "abc"
 
     with patch(
         "compose.editor.query.engines.SqlAlchemyInterface.check_status"
@@ -103,7 +105,7 @@ def test_execute_query_flow():
             query_id="abc"
         )
 
-        assert {"data": [[1]], "meta": [["C1"]]} == data["result"]
+        assert {"data": [[1]], "meta": [["C1"]]} == data  # data["result"]
 
     # fetch_result next
 
