@@ -122,11 +122,11 @@ def test_execute_query_flow_live():
     executor = Executor(username="test", interpreter=interpreter)
 
     data = executor.execute(statement="SELECT 1, 2, 3")
-    query_id = data["handle"].get("guid")
+    query_id = data["guid"]
     assert len(query_id) == 32
 
     data = executor.check_status(query_id=query_id)
     assert data["status"] == "available"
 
     data = executor.fetch_result(query_id=query_id, rows=3, start_over=False)
-    assert data["result"]["data"] == []
+    assert data["data"] == [[1, 2, 3]]

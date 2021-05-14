@@ -95,6 +95,6 @@ def test_execute_statement(dialect, url):
 
     query = {"statement": "SELECT 1, 2, 3"}
 
-    resultset = interpreter.execute(query=query)
+    resultset = interpreter.query(query=query)
 
     assert resultset["result"]["data"] == [[1, 2, 3]]
