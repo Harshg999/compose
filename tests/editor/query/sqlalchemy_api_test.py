@@ -81,7 +81,7 @@ def test_fetch_result():
     ("dialect", "url"),
     [
         ("sqllite", "sqlite:///../db-demo.sqlite3"),
-        ("mysql", "mysql://root:password@127.0.0.1:13306/mysql"),
+        # ("mysql", "mysql://root:password@127.0.0.1:13306/mysql"),
     ],
 )
 def test_execute_statement(dialect, url):
