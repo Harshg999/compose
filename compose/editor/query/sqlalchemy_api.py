@@ -271,6 +271,7 @@ class SqlAlchemyInterface:
             },
         }
 
+    @query_error_handler
     def check_status(self, query_id):
         handle = CONNECTIONS.get(query_id)
 
@@ -289,6 +290,7 @@ class SqlAlchemyInterface:
 
         return response
 
+    @query_error_handler
     def fetch_result(self, query_id, rows=100, start_over=False):
         handle = CONNECTIONS.get(query_id)
 
@@ -306,6 +308,7 @@ class SqlAlchemyInterface:
             "type": "table",
         }
 
+    @query_error_handler
     def autocomplete(
         self,
         database=None,
