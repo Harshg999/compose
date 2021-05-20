@@ -207,8 +207,8 @@ def _get_interpreter(query_id):
 
     interpreter = {
         "options": {
-            # "url": "sqlite:///db-demo.sqlite3"  # Dev server only (single threading)
-            "url": "mysql://hue:hue@localhost:3306/hue"
+            "url": "sqlite:///db-demo.sqlite3"  # Dev server only (single threading)
+            # "url": "mysql://hue:hue@localhost:3306/hue"
         },
         "name": "mysql",
         "dialect_properties": {},
