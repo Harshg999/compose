@@ -17,14 +17,20 @@
 
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.views.generic.base import RedirectView
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
-from rest_framework_jwt.views import obtain_jwt_token, verify_jwt_token
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+
+import compose.connectors.api as connector_api
 
 urlpatterns = [
     path(
@@ -35,13 +41,23 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path("iam/v1/get/auth-token/", obtain_jwt_token),
-    path("iam/v1/verify/auth-token/", verify_jwt_token),
-    path("iam/v1/auth/", include("rest_framework.urls", namespace="rest_framework")),
+    re_path("^api/token/auth/?$", TokenObtainPairView.as_view(), name="token_obtain"),
+    re_path("^api/token/verify/?$", TokenVerifyView.as_view(), name="token_verify"),
+    re_path("^api/token/refresh/?$", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/auth/", include("rest_framework.urls", namespace="rest_framework")),
 ]
 
 urlpatterns += [
-    path("editor/v1/", include("compose.editor.urls", namespace="editor")),
+    re_path(r"^api/get_config/?$", connector_api.get_config, name="get_config"),
+    re_path(  # To not support anymore going forward, unused
+        r"^api/get_namespaces/(?P<interface>[\w\-]+)/?$",
+        connector_api.get_namespaces,
+        name="get_namespaces",
+    ),
+]
+
+urlpatterns += [
+    path("api/editor/", include("compose.editor.urls", namespace="editor")),
 ]
 
 urlpatterns += [

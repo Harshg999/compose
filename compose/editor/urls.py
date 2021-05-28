@@ -22,6 +22,8 @@ from . import api
 app_name = "editor"
 
 urlpatterns = [
+    re_path(r"^create_session/?$", api.create_session, name="api_create_session"),
+    re_path(r"^close_session/?$", api.close_session, name="api_close_session"),
     re_path(r"^query/(?P<dialect>.+)/?$", api.query, name="query"),
     re_path(r"^execute/(?P<dialect>.+)/?$", api.execute, name="execute"),
     re_path(r"^check_status/?$", api.check_status, name="check_status"),

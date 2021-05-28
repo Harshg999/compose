@@ -9,11 +9,11 @@ Check the console
   const API_URL = "/";
   axios.defaults.baseURL = API_URL;
 
-  axios.post('iam/v1/get/auth-token/', {username: "hue", password: "hue"}).then(function(data) {
+  axios.post('api/token/auth', {username: "hue", password: "hue"}).then(function(data) {
     console.log(data['data']);
 
     // Util to check if cached token is still valid before asking to auth for a new one
-    axios.post('iam/v1/verify/auth-token/', {token: data['data']['token']});
+    axios.post('api/token/verify', {token: data['data']['token']});
 
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + data['data']['token'];
   }).then(function() {

@@ -105,7 +105,7 @@ def get_config(request):
 
 
 @api_view(["GET"])
-def get_namespaces(request, id):
+def get_namespaces(request, interface):
     return Response(
         {
             "1": [

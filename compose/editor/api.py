@@ -187,6 +187,12 @@ def close(request):
 
 @api_view(["POST"])
 @api_error_handler
+def close_session(request):
+    return JsonResponse({})
+
+
+@api_view(["POST"])
+@api_error_handler
 def autocomplete(request, database=None, table=None, column=None, nested=None):
     print(request.data)
     print(request.POST)
