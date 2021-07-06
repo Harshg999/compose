@@ -12,7 +12,7 @@ Compose
 
 [Query Editor component](https://docs.gethue.com/developer/components/scratchpad/)
 
-Compose is the open source module powering the [Hue SQL Assistant](http://gethue.com). It comes as Web service for querying any [Databases & Data Warehouses](https://docs.gethue.com/administrator/configuration/connectors/) or building your own [Cloud SQL Editor](https://docs.gethue.com/developer/components/). Contributions are welcome and more modules are on the way (Files, Catalog...).
+Compose is the open source module powering the [Hue SQL Editor](http://gethue.com). It comes as a Web service API for querying any [Databases & Data Warehouses](https://docs.gethue.com/administrator/configuration/connectors/) or building your own [Cloud SQL Editor](https://docs.gethue.com/developer/components/).
 
 
 <img src="https://cdn.gethue.com/uploads/2021/05/sql-scratchpad-v0.5.png" width="450">
