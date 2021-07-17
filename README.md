@@ -59,6 +59,9 @@ Checks
     pre-commit run --all-files
     python compose/manage.py test
 
+Hue
+
+    npm run webpack-npm
 
 # API
 

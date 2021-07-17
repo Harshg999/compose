@@ -22,7 +22,4 @@ In HTML:
 
 API:
 
-Expect a running Hue on http://locahost:9000 with a hue/hue user and this ini setting:
-
-    [desktop]
-    cors_enabled=true
+Can be running Compose server or Hue on http://locahost:9000.
